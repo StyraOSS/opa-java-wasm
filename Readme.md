@@ -1,6 +1,8 @@
 [![CI](https://github.com/andreaTP/opa-chicory/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-chicory)
 [![](https://jitpack.io/v/andreaTP/opa-chicory.svg)](https://jitpack.io/#andreaTP/opa-chicory)
 
+> **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
+
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
 This is an SDK for using WebAssembly (wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
