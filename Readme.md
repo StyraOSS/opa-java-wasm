@@ -1,6 +1,8 @@
 [![CI](https://github.com/andreaTP/opa-chicory/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-chicory)
 [![](https://jitpack.io/v/andreaTP/opa-chicory.svg)](https://jitpack.io/#andreaTP/opa-chicory)
 
+# :construction: :construction: :construction: Under construction :construction: :construction: :construction:
+
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
 This is an SDK for using WebAssembly (wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
