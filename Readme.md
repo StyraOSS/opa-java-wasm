@@ -3,6 +3,8 @@
 
 # :construction: :construction: :construction: Under construction :construction: :construction: :construction:
 
+> This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here
+
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
 This is an SDK for using WebAssembly (wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
