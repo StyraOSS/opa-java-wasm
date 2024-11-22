@@ -1,9 +1,7 @@
 [![CI](https://github.com/andreaTP/opa-chicory/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-chicory)
 [![](https://jitpack.io/v/andreaTP/opa-chicory.svg)](https://jitpack.io/#andreaTP/opa-chicory)
 
-# :construction: :construction: :construction: Under construction :construction: :construction: :construction:
-
-> This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here
+> **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
 
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
