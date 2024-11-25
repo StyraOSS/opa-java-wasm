@@ -1,8 +1,8 @@
-package com.github.andreaTP.opa.chicory;
+package com.styra.opa.wasm;
 
 import com.dylibso.chicory.runtime.Memory;
 import com.dylibso.chicory.wasm.types.MemoryLimits;
-import com.github.andreaTP.opa.chicory.builtins.Provided;
+import com.styra.opa.wasm.builtins.Provided;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

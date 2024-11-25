@@ -1,4 +1,4 @@
-package com.github.andreaTP.opa.chicory.testcases;
+package com.styra.opa.wasm.testcases;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;

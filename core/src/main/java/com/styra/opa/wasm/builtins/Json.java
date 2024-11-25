@@ -1,10 +1,10 @@
-package com.github.andreaTP.opa.chicory.builtins;
+package com.styra.opa.wasm.builtins;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.github.andreaTP.opa.chicory.Opa;
-import com.github.andreaTP.opa.chicory.OpaBuiltin;
+import com.styra.opa.wasm.Opa;
+import com.styra.opa.wasm.OpaBuiltin;
 
 public class Json {
 

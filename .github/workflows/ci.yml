@@ -65,7 +65,7 @@ jobs:
       with:
         version: ${{ matrix.opa-version }}
 
-    - name: Test OPA-Chicory
+    - name: Test opa-java-wasm
       run: mvn -B spotless:apply clean install
 
     - name: Publish Test Report

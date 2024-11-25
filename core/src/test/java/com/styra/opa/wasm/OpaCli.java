@@ -1,4 +1,4 @@
-package com.github.andreaTP.opa.chicory;
+package com.styra.opa.wasm;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package com.github.andreaTP.opa.chicory;
+package com.styra.opa.wasm;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

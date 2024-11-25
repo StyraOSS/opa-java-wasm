@@ -1,6 +1,7 @@
-package com.github.andreaTP.opa.chicory.builtins;
+package com.styra.opa.wasm.builtins;
 
-import com.github.andreaTP.opa.chicory.OpaBuiltin;
+import com.styra.opa.wasm.OpaBuiltin;
+
 import java.util.Arrays;
 
 public class Provided {

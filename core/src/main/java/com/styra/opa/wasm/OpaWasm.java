@@ -1,4 +1,4 @@
-package com.github.andreaTP.opa.chicory;
+package com.styra.opa.wasm;
 
 import com.dylibso.chicory.runtime.HostFunction;
 import com.dylibso.chicory.runtime.ImportMemory;

@@ -1,7 +1,7 @@
-package com.github.andreaTP.opa.chicory;
+package com.styra.opa.wasm;
 
-import static com.github.andreaTP.opa.chicory.OpaCli.baseDestFolder;
-import static com.github.andreaTP.opa.chicory.OpaCli.testcasesDestFolder;
+import static com.styra.opa.wasm.OpaCli.baseDestFolder;
+import static com.styra.opa.wasm.OpaCli.testcasesDestFolder;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,14 +14,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.github.andreaTP.opa.chicory.testcases.TestCaseData;
-import com.github.andreaTP.opa.chicory.testcases.Testcases;
+import com.styra.opa.wasm.testcases.TestCaseData;
+import com.styra.opa.wasm.testcases.Testcases;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.params.ParameterizedTest;

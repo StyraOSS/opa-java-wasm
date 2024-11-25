@@ -1,4 +1,4 @@
-package com.github.andreaTP.opa.chicory.testcases;
+package com.styra.opa.wasm.testcases;
 
 import java.nio.file.Path;
 

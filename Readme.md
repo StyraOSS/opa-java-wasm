@@ -1,5 +1,5 @@
-[![CI](https://github.com/andreaTP/opa-chicory/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-chicory)
-[![](https://jitpack.io/v/andreaTP/opa-chicory.svg)](https://jitpack.io/#andreaTP/opa-chicory)
+[![CI](https://github.com/andreaTP/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-java-wasm)
+[![](https://jitpack.io/v/andreaTP/opa-java-wasm.svg)](https://jitpack.io/#andreaTP/opa-java-wasm)
 
 > **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
 
@@ -35,8 +35,8 @@ and add the core module dependency:
 
 ```xml
 <dependency>
-    <groupId>com.github.andreaTP.opa-chicory</groupId>
-    <artifactId>opa-chicory-core</artifactId>
+    <groupId>com.github.andreaTP.opa-java-wasm</groupId>
+    <artifactId>opa-java-wasm-core</artifactId>
     <version>main-SNAPSHOT</version>
 </dependency>
 ```
@@ -48,7 +48,7 @@ There are only a couple of steps required to start evaluating the policy.
 ### Import the module
 
 ```java
-import com.github.andreaTP.opa.chicory.Opa;
+import com.styra.opa.wasm.Opa;
 ```
 
 ### Load the policy
