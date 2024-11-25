@@ -20,24 +20,13 @@ We want fast in-process OPA policies evaluations, and avoid network bottlenecks 
 
 ## Install the module
 
-With Maven, add Jitpack to the `repositories` section:
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-and add the core module dependency:
+With Maven add the core module dependency:
 
 ```xml
 <dependency>
-    <groupId>com.github.andreaTP.opa-java-wasm</groupId>
-    <artifactId>opa-java-wasm-core</artifactId>
-    <version>main-SNAPSHOT</version>
+    <groupId>com.styra.opa</groupId>
+    <artifactId>opa-java-wasm</artifactId>
+    <version>latest_release</version>
 </dependency>
 ```
 
