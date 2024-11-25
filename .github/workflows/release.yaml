@@ -41,7 +41,7 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
 
       - name: Compile
-        run: mvn --batch-mode -Dquickly
+        run: mvn --batch-mode clean install -DskipTests
 
       - name: Setup Git
         run: |
@@ -51,19 +51,16 @@ jobs:
       - name: Set the version
         run: |
           mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${{ github.event.inputs.release-version }}
-          ./scripts/update-docs-version ${{ github.event.inputs.release-version }}
           git add .
           git commit -m "Release version update ${{ github.event.inputs.release-version }}"
           git push
           git tag ${{ github.event.inputs.release-version }}
           git push origin ${{ github.event.inputs.release-version }}
         env:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release to Maven Central
         run: |
-          # -Dquickly is needed to locally publish wasm-corpus
-          mvn --batch-mode -Dquickly
           mvn --batch-mode clean deploy -Drelease -DskipTests=true -X
         env:
           MAVEN_USERNAME: ${{ secrets.ossrh_username }}
