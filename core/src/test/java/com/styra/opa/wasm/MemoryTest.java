@@ -20,9 +20,14 @@ public class MemoryTest {
     @Test
     public void inputExceedsMemoryHostFailsToGrowIt() {
         var policy =
-                Opa.loadPolicy(
-                        wasmFile,
-                        OpaDefaultImports.builder().withMemoryInitial(2).withMemoryMax(2).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder()
+                                        .withMemoryInitial(2)
+                                        .withMemoryMax(2)
+                                        .build())
+                        .withPolicy(wasmFile)
+                        .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
         var exception = assertThrows(RuntimeException.class, () -> policy.evaluate(input));
         assertEquals("Maximum memory size exceeded", exception.getMessage());
@@ -31,9 +36,14 @@ public class MemoryTest {
     @Test
     public void parsingInputExceedsMemory() {
         var policy =
-                Opa.loadPolicy(
-                        wasmFile,
-                        OpaDefaultImports.builder().withMemoryInitial(3).withMemoryMax(4).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder()
+                                        .withMemoryInitial(3)
+                                        .withMemoryMax(4)
+                                        .build())
+                        .withPolicy(wasmFile)
+                        .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
         var exception = assertThrows(OpaAbortException.class, () -> policy.input(input));
         Assertions.assertEquals("opa_abort - opa_malloc: failed", exception.getMessage());
@@ -42,9 +52,14 @@ public class MemoryTest {
     @Test
     public void largeInputHostAndGuestGrowSuccessfully() {
         var policy =
-                Opa.loadPolicy(
-                        wasmFile,
-                        OpaDefaultImports.builder().withMemoryInitial(2).withMemoryMax(8).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder()
+                                        .withMemoryInitial(2)
+                                        .withMemoryMax(8)
+                                        .build())
+                        .withPolicy(wasmFile)
+                        .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
         assertDoesNotThrow(() -> policy.evaluate(input));
     }
@@ -52,9 +67,14 @@ public class MemoryTest {
     @Test
     public void doesNotLeakMemoryEvaluatingTheSamePolicyMultipleTimes() {
         var policy =
-                Opa.loadPolicy(
-                        wasmFile,
-                        OpaDefaultImports.builder().withMemoryInitial(2).withMemoryMax(8).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder()
+                                        .withMemoryInitial(2)
+                                        .withMemoryMax(8)
+                                        .build())
+                        .withPolicy(wasmFile)
+                        .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
         for (int i = 0; i < 16; i++) {
             assertDoesNotThrow(() -> policy.evaluate(input));

@@ -8,21 +8,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class OpaCustomBuiltinsTest {
-    static Opa.OpaPolicy policy;
+    static OpaPolicy policy;
 
     static OpaBuiltin.Builtin[] customBuiltins =
             new OpaBuiltin.Builtin[] {
-                OpaBuiltin.from("custom.zeroArgBuiltin", () -> TextNode.valueOf("hello")),
+                OpaBuiltin.from("custom.zeroArgBuiltin", (instance) -> TextNode.valueOf("hello")),
                 OpaBuiltin.from(
                         "custom.oneArgBuiltin",
-                        (arg0) -> TextNode.valueOf("hello " + arg0.asText())),
+                        (instance, arg0) -> TextNode.valueOf("hello " + arg0.asText())),
                 OpaBuiltin.from(
                         "custom.twoArgBuiltin",
-                        (arg0, arg1) ->
+                        (instance, arg0, arg1) ->
                                 TextNode.valueOf("hello " + arg0.asText() + ", " + arg1.asText())),
                 OpaBuiltin.from(
                         "custom.threeArgBuiltin",
-                        (arg0, arg1, arg2) ->
+                        (instance, arg0, arg1, arg2) ->
                                 TextNode.valueOf(
                                         "hello "
                                                 + arg0.asText()
@@ -32,7 +32,7 @@ public class OpaCustomBuiltinsTest {
                                                 + arg2.asText())),
                 OpaBuiltin.from(
                         "custom.fourArgBuiltin",
-                        (arg0, arg1, arg2, arg3) ->
+                        (instance, arg0, arg1, arg2, arg3) ->
                                 TextNode.valueOf(
                                         "hello "
                                                 + arg0.asText()
@@ -44,7 +44,7 @@ public class OpaCustomBuiltinsTest {
                                                 + arg3.asText())),
                 OpaBuiltin.from(
                         "json.is_valid",
-                        (arg0) -> {
+                        (instance, arg0) -> {
                             throw new RuntimeException("should never happen");
                         })
             };
@@ -52,18 +52,21 @@ public class OpaCustomBuiltinsTest {
     @BeforeAll
     public static void beforeAll() throws Exception {
         policy =
-                Opa.loadPolicy(
-                        OpaCli.compile(
-                                        "custom-builtins",
-                                        true,
-                                        "custom_builtins/zero_arg",
-                                        "custom_builtins/one_arg",
-                                        "custom_builtins/two_arg",
-                                        "custom_builtins/three_arg",
-                                        "custom_builtins/four_arg",
-                                        "custom_builtins/valid_json")
-                                .resolve("policy.wasm"),
-                        OpaDefaultImports.builder().addBuiltins(customBuiltins).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder().addBuiltins(customBuiltins).build())
+                        .withPolicy(
+                                OpaCli.compile(
+                                                "custom-builtins",
+                                                true,
+                                                "custom_builtins/zero_arg",
+                                                "custom_builtins/one_arg",
+                                                "custom_builtins/two_arg",
+                                                "custom_builtins/three_arg",
+                                                "custom_builtins/four_arg",
+                                                "custom_builtins/valid_json")
+                                        .resolve("policy.wasm"))
+                        .build();
     }
 
     @Test

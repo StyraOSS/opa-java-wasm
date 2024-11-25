@@ -8,22 +8,24 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class OpaYamlSupportTest {
-    static Opa.OpaPolicy policy;
+    static OpaPolicy policy;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
         policy =
-                Opa.loadPolicy(
-                        OpaCli.compile(
-                                        "yaml-support",
-                                        "yaml/support/canParseYAML",
-                                        "yaml/support/hasSyntaxError",
-                                        "yaml/support/hasSemanticError",
-                                        "yaml/support/hasReferenceError",
-                                        "yaml/support/hasYAMLWarning",
-                                        "yaml/support/canMarshalYAML",
-                                        "yaml/support/isValidYAML")
-                                .resolve("policy.wasm"));
+                OpaPolicy.builder()
+                        .withPolicy(
+                                OpaCli.compile(
+                                                "yaml-support",
+                                                "yaml/support/canParseYAML",
+                                                "yaml/support/hasSyntaxError",
+                                                "yaml/support/hasSemanticError",
+                                                "yaml/support/hasReferenceError",
+                                                "yaml/support/hasYAMLWarning",
+                                                "yaml/support/canMarshalYAML",
+                                                "yaml/support/isValidYAML")
+                                        .resolve("policy.wasm"))
+                        .build();
     }
 
     @Test

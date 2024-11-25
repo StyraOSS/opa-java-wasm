@@ -7,6 +7,7 @@ import com.dylibso.chicory.runtime.Instance;
 import com.dylibso.chicory.runtime.Memory;
 import com.dylibso.chicory.wasm.Parser;
 import com.dylibso.chicory.wasm.types.ValueType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
 import java.util.List;
 
@@ -15,8 +16,17 @@ import java.util.List;
 public class OpaWasm {
     private final OpaImports imports;
     private final Instance instance;
+    private final ObjectMapper jsonMapper;
+    private final ObjectMapper yamlMapper;
 
-    public OpaWasm(OpaImports imports, InputStream is) {
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    private OpaWasm(
+            OpaImports imports, InputStream is, ObjectMapper jsonMapper, ObjectMapper yamlMapper) {
+        this.jsonMapper = jsonMapper;
+        this.yamlMapper = yamlMapper;
         this.imports = imports;
         // Imports
         ImportMemory memory = new ImportMemory("env", "memory", imports.memory());
@@ -138,8 +148,49 @@ public class OpaWasm {
                         .build();
     }
 
+    public static class Builder {
+        private OpaImports imports;
+        private InputStream is;
+        private ObjectMapper jsonMapper;
+        private ObjectMapper yamlMapper;
+
+        private Builder() {}
+
+        public Builder withImports(OpaImports imports) {
+            this.imports = imports;
+            return this;
+        }
+
+        public Builder withInputStream(InputStream is) {
+            this.is = is;
+            return this;
+        }
+
+        public Builder withJsonMapper(ObjectMapper jsonMapper) {
+            this.jsonMapper = jsonMapper;
+            return this;
+        }
+
+        public Builder withYamlMapper(ObjectMapper yamlMapper) {
+            this.yamlMapper = yamlMapper;
+            return this;
+        }
+
+        public OpaWasm build() {
+            return new OpaWasm(imports, is, jsonMapper, yamlMapper);
+        }
+    }
+
     public OpaImports imports() {
         return imports;
+    }
+
+    public ObjectMapper jsonMapper() {
+        return jsonMapper;
+    }
+
+    public ObjectMapper yamlMapper() {
+        return yamlMapper;
     }
 
     public Memory memory() {

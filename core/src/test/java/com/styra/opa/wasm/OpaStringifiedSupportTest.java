@@ -32,7 +32,7 @@ public class OpaStringifiedSupportTest {
 
     @Test
     public void shouldAcceptStringifiedData() {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.data(data);
 
         var positiveResult = Utils.getResult(policy.evaluate("{ \"secret\" : \"secret\" }"));
@@ -44,7 +44,7 @@ public class OpaStringifiedSupportTest {
 
     @Test
     public void shouldAcceptStringifiedInputObject() {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.data(data);
 
         var positiveResult =
@@ -62,7 +62,7 @@ public class OpaStringifiedSupportTest {
 
     @Test
     public void shouldAcceptStringifiedInputPlainBoolean() {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.entrypoint("stringified/support/plainInputBoolean");
 
         var positiveResult = Utils.getResult(policy.evaluate(Utils.jsonPrettyPrint("true")));
@@ -74,7 +74,7 @@ public class OpaStringifiedSupportTest {
 
     @Test
     public void shouldAcceptStringifiedInputPlainNumber() {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.entrypoint("stringified/support/plainInputNumber");
 
         var positiveResult = Utils.getResult(policy.evaluate(Utils.jsonPrettyPrint("5")));
@@ -86,7 +86,7 @@ public class OpaStringifiedSupportTest {
 
     @Test
     public void shouldAcceptStringifiedInputPlainString() {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.entrypoint("stringified/support/plainInputString");
 
         var positiveResult = Utils.getResult(policy.evaluate(Utils.jsonPrettyPrint("\"test\"")));

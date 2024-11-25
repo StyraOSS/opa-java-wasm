@@ -1,7 +1,6 @@
 package com.styra.opa.wasm.builtins;
 
 import com.styra.opa.wasm.OpaBuiltin;
-
 import java.util.Arrays;
 
 public class Provided {

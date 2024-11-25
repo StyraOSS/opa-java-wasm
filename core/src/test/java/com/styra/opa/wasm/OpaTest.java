@@ -19,7 +19,11 @@ public class OpaTest {
     @Test
     public void lowLevelAPI() throws Exception {
         var imports = OpaDefaultImports.builder().build();
-        var opa = new OpaWasm(imports, new FileInputStream(wasmFile.toFile()));
+        var opa =
+                OpaWasm.builder()
+                        .withImports(imports)
+                        .withInputStream(new FileInputStream(wasmFile.toFile()))
+                        .build();
 
         assertEquals(opa.opaWasmAbiVersion(), 1);
         assertEquals(opa.opaWasmAbiMinorVersion(), 3);
@@ -63,7 +67,7 @@ public class OpaTest {
 
     @Test
     public void highLevelAPI() throws Exception {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.data("{ \"role\" : { \"alice\" : \"admin\", \"bob\" : \"user\" } }");
 
         // evaluate the admin

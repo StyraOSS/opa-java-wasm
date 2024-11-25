@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,11 +40,13 @@ public class OpaTestCasesTest {
     static boolean run = false;
     static OpaBuiltin.Builtin[] customBuiltins =
             new OpaBuiltin.Builtin[] {
-                OpaBuiltin.from("custom_builtin_test", (a) -> IntNode.valueOf(a.asInt() + 1)),
-                OpaBuiltin.from("custom_builtin_test_impure", () -> TextNode.valueOf("foo")),
+                OpaBuiltin.from(
+                        "custom_builtin_test", (instance, a) -> IntNode.valueOf(a.asInt() + 1)),
+                OpaBuiltin.from(
+                        "custom_builtin_test_impure", (instance) -> TextNode.valueOf("foo")),
                 OpaBuiltin.from(
                         "custom_builtin_test_memoization",
-                        () -> {
+                        (instance) -> {
                             if (run) {
                                 throw new RuntimeException("should have been memoized");
                             }
@@ -87,7 +88,7 @@ public class OpaTestCasesTest {
         return allTests.stream().map(f -> Arguments.of(f));
     }
 
-    private boolean findResult(Opa.OpaPolicy policy, JsonNode input, JsonNode expected) {
+    private boolean findResult(OpaPolicy policy, JsonNode input, JsonNode expected) {
         try {
             var sortedExpected =
                     mapper.writeValueAsString(mapper.treeToValue(expected, Object.class));
@@ -115,7 +116,7 @@ public class OpaTestCasesTest {
         }
     }
 
-    private void assertSingleResult(Opa.OpaPolicy policy, JsonNode input, JsonNode expected) {
+    private void assertSingleResult(OpaPolicy policy, JsonNode input, JsonNode expected) {
         try {
             var sortedExpected =
                     mapper.writeValueAsString(mapper.treeToValue(expected, Object.class));
@@ -142,9 +143,11 @@ public class OpaTestCasesTest {
     @MethodSource("walkTestcasesFolder")
     void externalTestcases(TestCaseData data) throws Exception {
         var policy =
-                Opa.loadPolicy(
-                        data.getPolicy(),
-                        OpaDefaultImports.builder().addBuiltins(customBuiltins).build());
+                OpaPolicy.builder()
+                        .withImports(
+                                OpaDefaultImports.builder().addBuiltins(customBuiltins).build())
+                        .withPolicy(data.getPolicy())
+                        .build();
         assertEquals(1, policy.entrypoints().size());
 
         if (data.getCase().data() == null) {

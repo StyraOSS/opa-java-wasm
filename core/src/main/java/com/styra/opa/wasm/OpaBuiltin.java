@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class OpaBuiltin {
     private OpaBuiltin() {}
@@ -159,12 +158,12 @@ public class OpaBuiltin {
     }
 
     // helpers for a convenient API
-    public static Builtin from(String name, Supplier<JsonNode> fn) {
+    public static Builtin from(String name, Function<OpaWasm, JsonNode> fn) {
         return new OpaBuiltin.Builtin0(
                 name,
                 (OpaWasm instance) -> {
                     try {
-                        var result = Opa.jsonMapper.writeValueAsString(fn.get());
+                        var result = instance.jsonMapper().writeValueAsString(fn.apply(instance));
                         return instance.writeResult(result);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
@@ -172,13 +171,15 @@ public class OpaBuiltin {
                 });
     }
 
-    public static Builtin from(String name, Function<JsonNode, JsonNode> fn) {
+    public static Builtin from(String name, BiFunction<OpaWasm, JsonNode, JsonNode> fn) {
         return new OpaBuiltin.Builtin1(
                 name,
                 (OpaWasm instance, int strAddr) -> {
                     try {
-                        var inputStr = Opa.jsonMapper.readTree(instance.readString(strAddr));
-                        var result = Opa.jsonMapper.writeValueAsString(fn.apply(inputStr));
+                        var inputStr = instance.jsonMapper().readTree(instance.readString(strAddr));
+                        var result =
+                                instance.jsonMapper()
+                                        .writeValueAsString(fn.apply(instance, inputStr));
                         return instance.writeResult(result);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
@@ -186,15 +187,24 @@ public class OpaBuiltin {
                 });
     }
 
-    public static Builtin from(String name, BiFunction<JsonNode, JsonNode, JsonNode> fn) {
+    @FunctionalInterface
+    public interface TwoFunction {
+        JsonNode apply(OpaWasm instance, JsonNode arg0, JsonNode arg1);
+    }
+
+    public static Builtin from(String name, TwoFunction fn) {
         return new OpaBuiltin.Builtin2(
                 name,
                 (OpaWasm instance, int strAddr1, int strAddr2) -> {
                     try {
-                        var inputStr1 = Opa.jsonMapper.readTree(instance.readString(strAddr1));
-                        var inputStr2 = Opa.jsonMapper.readTree(instance.readString(strAddr2));
+                        var inputStr1 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr1));
+                        var inputStr2 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr2));
                         var result =
-                                Opa.jsonMapper.writeValueAsString(fn.apply(inputStr1, inputStr2));
+                                instance.jsonMapper()
+                                        .writeValueAsString(
+                                                fn.apply(instance, inputStr1, inputStr2));
                         return instance.writeResult(result);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
@@ -204,7 +214,7 @@ public class OpaBuiltin {
 
     @FunctionalInterface
     public interface ThreeFunction {
-        JsonNode apply(JsonNode arg0, JsonNode arg1, JsonNode arg2);
+        JsonNode apply(OpaWasm instance, JsonNode arg0, JsonNode arg1, JsonNode arg2);
     }
 
     public static Builtin from(String name, ThreeFunction fn) {
@@ -212,12 +222,17 @@ public class OpaBuiltin {
                 name,
                 (OpaWasm instance, int strAddr1, int strAddr2, int strAddr3) -> {
                     try {
-                        var inputStr1 = Opa.jsonMapper.readTree(instance.readString(strAddr1));
-                        var inputStr2 = Opa.jsonMapper.readTree(instance.readString(strAddr2));
-                        var inputStr3 = Opa.jsonMapper.readTree(instance.readString(strAddr3));
+                        var inputStr1 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr1));
+                        var inputStr2 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr2));
+                        var inputStr3 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr3));
                         var result =
-                                Opa.jsonMapper.writeValueAsString(
-                                        fn.apply(inputStr1, inputStr2, inputStr3));
+                                instance.jsonMapper()
+                                        .writeValueAsString(
+                                                fn.apply(
+                                                        instance, inputStr1, inputStr2, inputStr3));
                         return instance.writeResult(result);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
@@ -227,7 +242,8 @@ public class OpaBuiltin {
 
     @FunctionalInterface
     public interface FourFunction {
-        JsonNode apply(JsonNode arg0, JsonNode arg1, JsonNode arg2, JsonNode arg3);
+        JsonNode apply(
+                OpaWasm instance, JsonNode arg0, JsonNode arg1, JsonNode arg2, JsonNode arg3);
     }
 
     public static Builtin from(String name, FourFunction fn) {
@@ -235,13 +251,20 @@ public class OpaBuiltin {
                 name,
                 (OpaWasm instance, int strAddr1, int strAddr2, int strAddr3, int strAddr4) -> {
                     try {
-                        var inputStr1 = Opa.jsonMapper.readTree(instance.readString(strAddr1));
-                        var inputStr2 = Opa.jsonMapper.readTree(instance.readString(strAddr2));
-                        var inputStr3 = Opa.jsonMapper.readTree(instance.readString(strAddr3));
-                        var inputStr4 = Opa.jsonMapper.readTree(instance.readString(strAddr4));
+                        var inputStr1 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr1));
+                        var inputStr2 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr2));
+                        var inputStr3 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr3));
+                        var inputStr4 =
+                                instance.jsonMapper().readTree(instance.readString(strAddr4));
                         var result =
-                                Opa.jsonMapper.writeValueAsString(
-                                        fn.apply(inputStr1, inputStr2, inputStr3, inputStr4));
+                                instance.jsonMapper()
+                                        .writeValueAsString(
+                                                fn.apply(
+                                                        instance, inputStr1, inputStr2, inputStr3,
+                                                        inputStr4));
                         return instance.writeResult(result);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);

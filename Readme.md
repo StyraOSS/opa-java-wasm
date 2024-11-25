@@ -43,7 +43,7 @@ import com.styra.opa.wasm.Opa;
 ### Load the policy
 
 ```java
-var policy = Opa.loadPolicy(policyWasm);
+var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 ```
 
 The `policyWasm` ca be a variety of things, including raw byte array, `InputStream`, `Path`, `File`.
@@ -52,7 +52,7 @@ The content should be the compiled policy Wasm file, a valid WebAssembly module.
 For example:
 
 ```java
-var policy = Opa.loadPolicy(new File("policy.wasm"));
+var policy = OpaPolicy.builder().withPolicy(new File("policy.wasm")).build();
 ```
 
 ### Evaluate the Policy
@@ -74,7 +74,7 @@ Example:
 ```java
 input = '{"path": "/", "role": "admin"}';
 
-var policy = Opa.loadPolicy(policyWasm);
+var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 var result = policy.evaluate(input);
 System.out.println("Result is: " + result);
 ```

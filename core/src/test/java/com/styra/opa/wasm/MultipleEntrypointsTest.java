@@ -20,7 +20,7 @@ public class MultipleEntrypointsTest {
 
     @Test
     public void shouldRunWithDefaultEntrypoint() throws Exception {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         var result = Utils.getResult(policy.evaluate());
 
         assertTrue(result.size() > 0);
@@ -30,7 +30,7 @@ public class MultipleEntrypointsTest {
 
     @Test
     public void shouldRunWithNumberedEntrypointSpecified() throws Exception {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.input("{}").entrypoint("example/one");
 
         var result = Utils.getResult(policy.evaluate());
@@ -42,7 +42,7 @@ public class MultipleEntrypointsTest {
 
     @Test
     public void shouldRunWithSecondEntrypointSpecified() throws Exception {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         policy.input("{}").entrypoint("example/two");
 
         var result = Utils.getResult(policy.evaluate());
@@ -54,7 +54,7 @@ public class MultipleEntrypointsTest {
 
     @Test
     public void shouldNotRunIfEntrypointStringDoesNotExist() throws Exception {
-        var policy = Opa.loadPolicy(wasmFile);
+        var policy = OpaPolicy.builder().withPolicy(wasmFile).build();
         var exception =
                 assertThrows(
                         IllegalArgumentException.class,
