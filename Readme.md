@@ -1,4 +1,4 @@
-[![CI](https://github.com/andreaTP/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-java-wasm)
+[![CI](https://github.com/StyraInc/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/StyraInc/opa-java-wasm)
 [![](https://jitpack.io/v/StyraInc/opa-java-wasm.svg)](https://jitpack.io/#StyraInc/opa-java-wasm)
 
 > **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
