@@ -1,5 +1,5 @@
-[![CI](https://github.com/andreaTP/opa-chicory/workflows/CI/badge.svg)](https://github.com/andreaTP/opa-chicory)
-[![](https://jitpack.io/v/andreaTP/opa-chicory.svg)](https://jitpack.io/#andreaTP/opa-chicory)
+[![CI](https://github.com/StyraInc/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/StyraInc/opa-java-wasm)
+[![](https://jitpack.io/v/StyraInc/opa-java-wasm.svg)](https://jitpack.io/#StyraInc/opa-java-wasm)
 
 > **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
 
@@ -20,24 +20,13 @@ We want fast in-process OPA policies evaluations, and avoid network bottlenecks 
 
 ## Install the module
 
-With Maven, add Jitpack to the `repositories` section:
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-and add the core module dependency:
+With Maven add the core module dependency:
 
 ```xml
 <dependency>
-    <groupId>com.github.andreaTP.opa-chicory</groupId>
-    <artifactId>opa-chicory-core</artifactId>
-    <version>main-SNAPSHOT</version>
+    <groupId>com.styra.opa</groupId>
+    <artifactId>opa-java-wasm</artifactId>
+    <version>latest_release</version>
 </dependency>
 ```
 
@@ -48,13 +37,13 @@ There are only a couple of steps required to start evaluating the policy.
 ### Import the module
 
 ```java
-import com.github.andreaTP.opa.chicory.Opa;
+import com.styra.opa.wasm.Opa;
 ```
 
 ### Load the policy
 
 ```java
-var policy = Opa.loadPolicy(policyWasm);
+var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 ```
 
 The `policyWasm` ca be a variety of things, including raw byte array, `InputStream`, `Path`, `File`.
@@ -63,7 +52,7 @@ The content should be the compiled policy Wasm file, a valid WebAssembly module.
 For example:
 
 ```java
-var policy = Opa.loadPolicy(new File("policy.wasm"));
+var policy = OpaPolicy.builder().withPolicy(new File("policy.wasm")).build();
 ```
 
 ### Evaluate the Policy
@@ -85,7 +74,7 @@ Example:
 ```java
 input = '{"path": "/", "role": "admin"}';
 
-var policy = Opa.loadPolicy(policyWasm);
+var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 var result = policy.evaluate(input);
 System.out.println("Result is: " + result);
 ```

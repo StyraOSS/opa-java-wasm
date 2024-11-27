@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.andreaTP.opa.chicory</groupId>
-  <artifactId>opa-chicory-parent</artifactId>
+  <groupId>com.styra.opa</groupId>
+  <artifactId>opa-java-wasm-parent</artifactId>
   <version>999-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Opa Wasm for Java</name>
   <description>Run Opa rules in Wasm using the Chicory runtime</description>
-  <url>https://github.com/andreaTP/opa-chicory</url>
+  <url>https://github.com/StyraInc/opa-java-wasm</url>
 
   <licenses>
     <license>
@@ -31,8 +31,8 @@
   </modules>
 
   <scm>
-    <connection>scm:git@github.com:andreaTP/opa-chicory.git</connection>
-    <url>https://github.com/andreaTP/opa-chicory.git</url>
+    <connection>scm:git@github.com:StyraInc/opa-java-wasm.git</connection>
+    <url>https://github.com/StyraInc/opa-java-wasm.git</url>
   </scm>
 
   <distributionManagement>
