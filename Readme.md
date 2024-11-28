@@ -1,20 +1,19 @@
 [![CI](https://github.com/StyraInc/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/StyraInc/opa-java-wasm)
-[![](https://jitpack.io/v/StyraInc/opa-java-wasm.svg)](https://jitpack.io/#StyraInc/opa-java-wasm)
-
-> **This repo was recently transferred to the Styra organization and work is currently under way to get everything set up here**
+[![GitHub Release](https://img.shields.io/github/tag/StyraInc/opa-java-wasm.svg?style=flat&color=green)](https://github.com/StyraInc/opa-java-wasm/tags)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/StyraInc/opa-java-wasm/badge.svg?style=flat&color=green)](https://central.sonatype.com/artifact/StyraInc/opa-java-wasm)
 
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
-This is an SDK for using WebAssembly (wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
-with [Chicory](https://github.com/dylibso/chicory), a pure Java Wasm interpreter.
+This is an SDK for using WebAssembly(wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
+with Java powered by [Chicory](https://github.com/dylibso/chicory), a pure Java Wasm interpreter.
 
 Initial implementation was based
 on [Open Policy Agent WebAssemby NPM Module](https://github.com/open-policy-agent/npm-opa-wasm)
-and [Open Policy Agent Ebassembly dotnet core SDK](https://github.com/me-viper/OpaDotNet)
+and [Open Policy Agent WebAssembly dotnet core SDK](https://github.com/me-viper/OpaDotNet)
 
 ## Why
 
-We want fast in-process OPA policies evaluations, and avoid network bottlenecks when using [opa-java](https://github.com/StyraInc/opa-java).
+We want **fast**, **in-process** and **secure** OPA policies evaluation, and avoid network bottlenecks when using [opa-java](https://github.com/StyraInc/opa-java).
 
 # Getting Started
 
