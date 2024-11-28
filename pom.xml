@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.styra.opa</groupId>
   <artifactId>opa-java-wasm-parent</artifactId>
-  <version>999-SNAPSHOT</version>
+  <version>0.0.2</version>
   <packaging>pom</packaging>
   <name>Opa Wasm for Java</name>
   <description>Run Opa rules in Wasm using the Chicory runtime</description>
