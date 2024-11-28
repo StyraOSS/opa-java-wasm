@@ -60,7 +60,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <chicory.version>1.0.0-M2</chicory.version>
     <junit.version>5.11.3</junit.version>
-    <jackson.version>2.18.1</jackson.version>
+    <jackson.version>2.18.2</jackson.version>
     <spotless.version>2.43.0</spotless.version>
   </properties>
   <dependencyManagement>
