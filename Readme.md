@@ -1,6 +1,6 @@
 [![CI](https://github.com/StyraInc/opa-java-wasm/workflows/CI/badge.svg)](https://github.com/StyraInc/opa-java-wasm)
 [![GitHub Release](https://img.shields.io/github/tag/StyraInc/opa-java-wasm.svg?style=flat&color=green)](https://github.com/StyraInc/opa-java-wasm/tags)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/StyraInc/opa-java-wasm/badge.svg?style=flat&color=green)](https://central.sonatype.com/artifact/StyraInc/opa-java-wasm)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.styra.opa/opa-java-wasm/badge.svg?style=flat&color=green)](https://central.sonatype.com/artifact/com.styra.opa/opa-java-wasm)
 
 # Open Policy Agent WebAssembly Java SDK (experimental)
 
