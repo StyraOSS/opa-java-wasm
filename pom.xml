@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.styra.opa</groupId>
   <artifactId>opa-java-wasm-parent</artifactId>
-  <version>0.0.1</version>
+  <version>999-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Opa Wasm for Java</name>
   <description>Run Opa rules in Wasm using the Chicory runtime</description>
@@ -39,7 +39,7 @@
     <repository>
       <id>ossrh</id>
       <name>Central Repository OSSRH</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
