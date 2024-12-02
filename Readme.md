@@ -118,6 +118,10 @@ binary included. See [./examples](./examples) for a more comprehensive example.
 
 See `opa build --help` for more details.
 
+## Support
+
+This SDK is community supported and maintained and is not under the umbrella of SDKs eligible for Enterprise support from Styra. For bug reports and feature requests, please use Github issues. For real-time support, please join the Open Policy Agent or Styra Community slack organizations.
+
 ## Development
 
 To develop this library you need to have installed the following tools:
