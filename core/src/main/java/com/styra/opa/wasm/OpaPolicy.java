@@ -1,6 +1,8 @@
 package com.styra.opa.wasm;
 
+import com.dylibso.chicory.runtime.ByteBufferMemory;
 import com.dylibso.chicory.runtime.Memory;
+import com.dylibso.chicory.wasm.types.MemoryLimits;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,7 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,7 +35,8 @@ public class OpaPolicy {
     private OpaPolicy(OpaWasm wasm) {
         this.wasm = wasm;
 
-        if (!(wasm.opaWasmAbiVersion() == 1 && wasm.opaWasmAbiMinorVersion() == 3)) {
+        if (!(wasm.opaWasmAbiVersion().getValue() == 1L
+                && wasm.opaWasmAbiMinorVersion().getValue() == 3L)) {
             throw new IllegalArgumentException(
                     "Invalid version, supported 1.3, detected "
                             + wasm.opaWasmAbiVersion()
@@ -43,24 +48,6 @@ public class OpaPolicy {
         this.dataHeapPtr = this.baseHeapPtr;
         this.dataAddr = -1;
         wasm.opaHeapPtrSet(this.dataHeapPtr);
-
-        // map the builtins
-        try {
-            var mappings = new HashMap<String, Integer>();
-            int builtinsAddr = wasm.builtins();
-            var builtinsStrAddr = wasm.opaJsonDump(builtinsAddr);
-            var builtinsStr = wasm.memory().readCString(builtinsStrAddr);
-            wasm.opaFree(builtinsStrAddr);
-            wasm.opaFree(builtinsAddr);
-            var fields = wasm.jsonMapper().readTree(builtinsStr).fields();
-            while (fields.hasNext()) {
-                var field = fields.next();
-                mappings.put(field.getKey(), field.getValue().intValue());
-            }
-            wasm.imports().initializeBuiltins(mappings);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public OpaPolicy entrypoint(int entrypoint) {
@@ -154,7 +141,7 @@ public class OpaPolicy {
         wasm.opaEvalCtxSetInput(ctxAddr, this.inputAddr);
         wasm.opaEvalCtxSetEntrypoint(ctxAddr, this.entrypoint);
 
-        var evalResult = wasm.eval(ctxAddr);
+        var evalResult = OpaErrorCode.fromValue(wasm.eval(ctxAddr));
         if (evalResult != OpaErrorCode.OPA_ERR_OK) {
             throw new RuntimeException(
                     "Error evaluating the Opa Policy, returned code is: " + evalResult);
@@ -183,19 +170,21 @@ public class OpaPolicy {
         return new Builder();
     }
 
+    // TODO: review the default min, max limits
+    private static final int DEFAULT_MEMORY_INITIAL = 10;
+    private static final int DEFAULT_MEMORY_MAX = MemoryLimits.MAX_PAGES;
+
     public static class Builder {
-        private OpaImports imports;
         private InputStream is;
         private ObjectMapper jsonMapper;
         private ObjectMapper yamlMapper;
 
-        private Builder() {}
-        ;
+        private int initialMemory = DEFAULT_MEMORY_INITIAL;
+        private int maxMemory = DEFAULT_MEMORY_MAX;
+        private List<OpaBuiltin.Builtin> builtins = new ArrayList<>();
+        protected boolean defaultBuiltins = true;
 
-        public Builder withImports(OpaImports imports) {
-            this.imports = imports;
-            return this;
-        }
+        private Builder() {}
 
         public Builder withPolicy(InputStream is) {
             this.is = is;
@@ -232,6 +221,28 @@ public class OpaPolicy {
             return this;
         }
 
+        public Builder withInitialMemory(int initial) {
+            this.initialMemory = initial;
+            return this;
+        }
+
+        public Builder withMaxMemory(int max) {
+            this.maxMemory = max;
+            return this;
+        }
+
+        public Builder withDefaultBuiltins(boolean defaultBuiltins) {
+            this.defaultBuiltins = defaultBuiltins;
+            return this;
+        }
+
+        public Builder addBuiltins(OpaBuiltin.Builtin... builtins) {
+            for (var builtin : builtins) {
+                this.builtins.add(builtin);
+            }
+            return this;
+        }
+
         public OpaPolicy build() {
             // Default management
             if (jsonMapper == null) {
@@ -240,18 +251,21 @@ public class OpaPolicy {
             if (yamlMapper == null) {
                 yamlMapper = DefaultMappers.yamlMapper;
             }
-            if (imports == null) {
-                imports = OpaDefaultImports.builder().build();
-            }
             Objects.requireNonNull(is);
 
-            return new OpaPolicy(
+            var wasm =
                     OpaWasm.builder()
-                            .withImports(imports)
                             .withInputStream(is)
                             .withJsonMapper(jsonMapper)
                             .withYamlMapper(yamlMapper)
-                            .build());
+                            .withMemory(
+                                    new ByteBufferMemory(
+                                            new MemoryLimits(initialMemory, maxMemory)))
+                            .withDefaultBuiltins(defaultBuiltins)
+                            .addBuiltins(builtins.toArray(OpaBuiltin.Builtin[]::new))
+                            .build();
+
+            return new OpaPolicy(wasm);
         }
     }
 }

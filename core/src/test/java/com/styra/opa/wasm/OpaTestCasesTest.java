@@ -144,8 +144,7 @@ public class OpaTestCasesTest {
     void externalTestcases(TestCaseData data) throws Exception {
         var policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder().addBuiltins(customBuiltins).build())
+                        .addBuiltins(customBuiltins)
                         .withPolicy(data.getPolicy())
                         .build();
         assertEquals(1, policy.entrypoints().size());

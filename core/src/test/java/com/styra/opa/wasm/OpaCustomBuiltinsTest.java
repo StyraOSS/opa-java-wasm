@@ -53,8 +53,7 @@ public class OpaCustomBuiltinsTest {
     public static void beforeAll() throws Exception {
         policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder().addBuiltins(customBuiltins).build())
+                        .addBuiltins(customBuiltins)
                         .withPolicy(
                                 OpaCli.compile(
                                                 "custom-builtins",

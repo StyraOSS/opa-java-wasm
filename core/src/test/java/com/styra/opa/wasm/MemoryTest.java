@@ -21,11 +21,8 @@ public class MemoryTest {
     public void inputExceedsMemoryHostFailsToGrowIt() {
         var policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder()
-                                        .withMemoryInitial(2)
-                                        .withMemoryMax(2)
-                                        .build())
+                        .withInitialMemory(2)
+                        .withMaxMemory(2)
                         .withPolicy(wasmFile)
                         .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
@@ -37,11 +34,8 @@ public class MemoryTest {
     public void parsingInputExceedsMemory() {
         var policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder()
-                                        .withMemoryInitial(3)
-                                        .withMemoryMax(4)
-                                        .build())
+                        .withInitialMemory(3)
+                        .withMaxMemory(4)
                         .withPolicy(wasmFile)
                         .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
@@ -53,11 +47,8 @@ public class MemoryTest {
     public void largeInputHostAndGuestGrowSuccessfully() {
         var policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder()
-                                        .withMemoryInitial(2)
-                                        .withMemoryMax(8)
-                                        .build())
+                        .withInitialMemory(2)
+                        .withMaxMemory(8)
                         .withPolicy(wasmFile)
                         .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
@@ -68,11 +59,8 @@ public class MemoryTest {
     public void doesNotLeakMemoryEvaluatingTheSamePolicyMultipleTimes() {
         var policy =
                 OpaPolicy.builder()
-                        .withImports(
-                                OpaDefaultImports.builder()
-                                        .withMemoryInitial(2)
-                                        .withMemoryMax(8)
-                                        .build())
+                        .withInitialMemory(2)
+                        .withMaxMemory(8)
                         .withPolicy(wasmFile)
                         .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
