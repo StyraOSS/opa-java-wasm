@@ -72,3 +72,29 @@ jobs:
       if: success() || failure() # always run even if the previous step fails
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml'
+
+  readme-ci:
+    runs-on: ubuntu-latest
+    name: CI - Readme
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
+      - name: Build Opa Java Wasm
+        run: mvn clean install -DskipTests
+        env:
+          MAVEN_OPTS: "-Dmaven.repo.local=${{ github.workspace }}/repository"
+      # Test root Readme
+      - name: jbang
+        uses: jbangdev/jbang-action@9f8c55e0a2b6b297711162b20c209c5e07076e59 # tag=v0.117.1
+        with:
+          script: Readme.md
+        env:
+          JBANG_REPO: "${{ github.workspace }}/repository"
+      - name: compare results
+        run: diff -r Readme.result TestReadme.result
