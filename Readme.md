@@ -29,6 +29,18 @@ With Maven add the core module dependency:
 </dependency>
 ```
 
+<!--
+```java
+//DEPS com.styra.opa:opa-java-wasm:999-SNAPSHOT
+
+var policyPath = Path.of("core/src/main/resources/demo-policy.wasm");
+var targetPath = Path.of("policy.wasm");
+Files.copy(policyPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+var policyWasm = new File("policy.wasm");
+```
+-->
+
 ## Usage
 
 There are only a couple of steps required to start evaluating the policy.
@@ -36,7 +48,7 @@ There are only a couple of steps required to start evaluating the policy.
 ### Import the module
 
 ```java
-import com.styra.opa.wasm.Opa;
+import com.styra.opa.wasm.OpaPolicy;
 ```
 
 ### Load the policy
@@ -71,12 +83,18 @@ APIs for policy evaluation:
 Example:
 
 ```java
-input = '{"path": "/", "role": "admin"}';
+var input = "{\"path\": \"/\", \"role\": \"admin\"}";
 
 var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 var result = policy.evaluate(input);
 System.out.println("Result is: " + result);
 ```
+
+<!--
+```java
+Files.write(Paths.get("TestReadme.result"), (result + "\n").getBytes());
+```
+-->
 
 > For any `opa build` created WASM binaries the result set, when defined, will
 > contain a `result` key with the value of the compiled entrypoint. See

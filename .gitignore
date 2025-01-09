@@ -1,3 +1,5 @@
 target
 .idea
 testcases.tar.gz
+policy.wasm
+TestReadme.result
