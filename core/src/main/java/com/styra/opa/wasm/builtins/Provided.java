@@ -21,6 +21,6 @@ public class Provided {
     }
 
     public static OpaBuiltin.Builtin[] all() {
-        return all(Json.all(), Yaml.all());
+        return all(String.all(), Json.all(), Yaml.all());
     }
 }
