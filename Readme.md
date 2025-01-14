@@ -105,6 +105,9 @@ Files.write(Paths.get("TestReadme.result"), (result + "\n").getBytes());
 
 At the moment the following builtins are supported(and, by default, automatically injected when needed):
 
+- String
+    - `sprintf`
+
 - Json
     - `json.is_valid`
 
