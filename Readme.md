@@ -106,7 +106,7 @@ Files.write(Paths.get("TestReadme.result"), (result + "\n").getBytes());
 At the moment the following builtins are supported(and, by default, automatically injected when needed):
 
 - String
-    - `sprintf`
+    - `sprintf` **NOTE:** this implementation is [SDK-dependent](https://www.openpolicyagent.org/docs/latest/policy-reference/#builtin-strings-sprintf) and might generate different results depending on the runtime, please, limit the usage to trivial use-cases.
 
 - Json
     - `json.is_valid`
