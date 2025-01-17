@@ -96,10 +96,19 @@ public class OpaCli {
                     testcasesDestFolder.resolve(testcasesTar),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
+            var path = testcasesTarPath.toFile().getAbsolutePath();
+            var additionalInstructions = "";
+            if (path.endsWith("testcases.tar.gz")) {
+                additionalInstructions =
+                        ", to obtain the archive you need to clone"
+                            + " 'github.com/open-policy-agent/opa' and run the command:"
+                            + " `WASM_BUILD_ONLY=true make wasm-rego-test`, you should be able to"
+                            + " find the result in the Go cache directory";
+            }
             throw new RuntimeException(
                     testcasesTarPath.toFile().getAbsolutePath()
-                            + " file not found in root, please download it ... let figure out"
-                            + " how!",
+                            + " file not found in root"
+                            + additionalInstructions,
                     e);
         }
         List<String> tarCommand = new ArrayList<>();
