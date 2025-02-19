@@ -106,15 +106,15 @@ Files.write(Paths.get("TestReadme.result"), (result + "\n").getBytes());
 At the moment the following builtins are supported(and, by default, automatically injected when needed):
 
 - String
-    - `sprintf` **NOTE:** this implementation is [SDK-dependent](https://www.openpolicyagent.org/docs/latest/policy-reference/#builtin-strings-sprintf) and might generate different results depending on the runtime, please, limit the usage to trivial use-cases.
+  - `sprintf` **NOTE:** this implementation is [SDK-dependent](https://www.openpolicyagent.org/docs/latest/policy-reference/#builtin-strings-sprintf) and might generate different results depending on the runtime, please, limit the usage to trivial use-cases.
 
 - Json
-    - `json.is_valid`
+  - `json.is_valid`
 
 - Yaml
-    - `yaml.is_valid`
-    - `yaml.marshal`
-    - `yaml.unmarshal`
+  - `yaml.is_valid`
+  - `yaml.marshal`
+  - `yaml.unmarshal`
 
 ### Writing the policy
 
@@ -162,4 +162,23 @@ to disable the tests based on the Opa testsuite:
 
 ```bash
 OPA_TESTSUITE=disabled mvn spotless:apply install
+```
+
+## Releases
+
+The versions in `core/pom.xml` are updated as part of the release process.
+New releases are manually triggered by running the
+[release workflow](https://github.com/StyraInc/opa-java-wasm/blob/main/.github/workflows/release.yaml).
+
+This workflow requires a number of secrets to be set, while `OSSRH_PASSWORD` and
+username should not need to be rotated, `JAVA_GPG_SECRET_KEY` should be updated
+if the key has expired and has been removed from the
+[keyserver](https://keyserver.ubuntu.com). This secret is **not** base64
+encoded.
+
+An example error from a release run where they key has expired, note that this
+is not the final error about `Remote staging failed: Staging rules failure!`.
+
+```
+No public key: Key with id: (78fe9b032725616c) was not able to be located on &lt;a href=http://keyserver.ubuntu.com:11371/&gt;http://keyserver.ubuntu.com:11371/&lt;/a&gt;. Upload your public key and try the operation again.
 ```
