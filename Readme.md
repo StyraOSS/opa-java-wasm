@@ -15,6 +15,22 @@ and [Open Policy Agent WebAssembly dotnet core SDK](https://github.com/me-viper/
 
 We want **fast**, **in-process** and **secure** OPA policies evaluation, and avoid network bottlenecks when using [opa-java](https://github.com/StyraInc/opa-java).
 
+Using this integration you can switch from the traditional integration pattern:
+
+<p align="center">
+  <picture>
+    <img width="50%" src="imgs/traditional.png">
+  </picture>
+</p>
+
+to a fully embedded:
+
+<p align="center">
+  <picture>
+    <img width="50%" src="imgs/with-wasm.png">
+  </picture>
+</p>
+
 # Getting Started
 
 ## Install the module
