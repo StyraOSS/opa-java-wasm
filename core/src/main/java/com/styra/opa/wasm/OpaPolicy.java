@@ -1,6 +1,6 @@
 package com.styra.opa.wasm;
 
-import com.dylibso.chicory.runtime.ByteBufferMemory;
+import com.dylibso.chicory.runtime.ByteArrayMemory;
 import com.dylibso.chicory.runtime.Memory;
 import com.dylibso.chicory.wasm.types.MemoryLimits;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,19 +35,19 @@ public class OpaPolicy {
     private OpaPolicy(OpaWasm wasm) {
         this.wasm = wasm;
 
-        if (!(wasm.opaWasmAbiVersion().getValue() == 1L
-                && wasm.opaWasmAbiMinorVersion().getValue() == 3L)) {
+        if (!(wasm.exports().opaWasmAbiVersion().getValue() == 1L
+                && wasm.exports().opaWasmAbiMinorVersion().getValue() == 3L)) {
             throw new IllegalArgumentException(
                     "Invalid version, supported 1.3, detected "
-                            + wasm.opaWasmAbiVersion()
+                            + wasm.exports().opaWasmAbiVersion()
                             + "."
-                            + wasm.opaWasmAbiMinorVersion());
+                            + wasm.exports().opaWasmAbiMinorVersion());
         }
 
-        this.baseHeapPtr = wasm.opaHeapPtrGet();
+        this.baseHeapPtr = wasm.exports().opaHeapPtrGet();
         this.dataHeapPtr = this.baseHeapPtr;
         this.dataAddr = -1;
-        wasm.opaHeapPtrSet(this.dataHeapPtr);
+        wasm.exports().opaHeapPtrSet(this.dataHeapPtr);
     }
 
     public OpaPolicy entrypoint(int entrypoint) {
@@ -61,26 +61,26 @@ public class OpaPolicy {
     }
 
     private int loadJson(String data) {
-        var dataStrAddr = wasm.opaMalloc(data.length());
+        var dataStrAddr = wasm.exports().opaMalloc(data.length());
         wasm.memory().writeCString(dataStrAddr, data);
-        var dstAddr = wasm.opaJsonParse(dataStrAddr, data.length());
-        wasm.opaFree(dataStrAddr);
+        var dstAddr = wasm.exports().opaJsonParse(dataStrAddr, data.length());
+        wasm.exports().opaFree(dataStrAddr);
         return dstAddr;
     }
 
     private String dumpJson(int addr) {
-        int resultStrAddr = wasm.opaJsonDump(addr);
+        int resultStrAddr = wasm.exports().opaJsonDump(addr);
         var result = wasm.memory().readCString(resultStrAddr);
-        wasm.opaFree(resultStrAddr);
+        wasm.exports().opaFree(resultStrAddr);
         return result;
     }
 
     // data MUST be a serializable object or ArrayBuffer, which assumed to be a well-formed
     // stringified JSON
     public OpaPolicy data(String data) {
-        wasm.opaHeapPtrSet(this.baseHeapPtr);
+        wasm.exports().opaHeapPtrSet(this.baseHeapPtr);
         this.dataAddr = loadJson(data);
-        this.dataHeapPtr = wasm.opaHeapPtrGet();
+        this.dataHeapPtr = wasm.exports().opaHeapPtrGet();
         return this;
     }
 
@@ -110,7 +110,7 @@ public class OpaPolicy {
 
     public Map<String, Integer> entrypoints() {
         try {
-            var json = dumpJson(wasm.entrypoints());
+            var json = dumpJson(wasm.exports().entrypoints());
             var entrypoints =
                     wasm.jsonMapper()
                             .readValue(json, new TypeReference<HashMap<String, Integer>>() {});
@@ -130,24 +130,24 @@ public class OpaPolicy {
     }
 
     public String evaluate() {
-        var ctxAddr = wasm.opaEvalCtxNew();
+        var ctxAddr = wasm.exports().opaEvalCtxNew();
         if (this.dataAddr == -1) {
             data("");
         }
-        wasm.opaEvalCtxSetData(ctxAddr, this.dataAddr);
+        wasm.exports().opaEvalCtxSetData(ctxAddr, this.dataAddr);
         if (this.inputAddr == -1) {
             input("");
         }
-        wasm.opaEvalCtxSetInput(ctxAddr, this.inputAddr);
-        wasm.opaEvalCtxSetEntrypoint(ctxAddr, this.entrypoint);
+        wasm.exports().opaEvalCtxSetInput(ctxAddr, this.inputAddr);
+        wasm.exports().opaEvalCtxSetEntrypoint(ctxAddr, this.entrypoint);
 
-        var evalResult = OpaErrorCode.fromValue(wasm.eval(ctxAddr));
+        var evalResult = OpaErrorCode.fromValue(wasm.exports().eval(ctxAddr));
         if (evalResult != OpaErrorCode.OPA_ERR_OK) {
             throw new RuntimeException(
                     "Error evaluating the Opa Policy, returned code is: " + evalResult);
         }
 
-        this.resultAddr = wasm.opaEvalCtxGetResult(ctxAddr);
+        this.resultAddr = wasm.exports().opaEvalCtxGetResult(ctxAddr);
         var result = dumpJson(resultAddr);
         return result;
     }
@@ -259,8 +259,7 @@ public class OpaPolicy {
                             .withJsonMapper(jsonMapper)
                             .withYamlMapper(yamlMapper)
                             .withMemory(
-                                    new ByteBufferMemory(
-                                            new MemoryLimits(initialMemory, maxMemory)))
+                                    new ByteArrayMemory(new MemoryLimits(initialMemory, maxMemory)))
                             .withDefaultBuiltins(defaultBuiltins)
                             .addBuiltins(builtins.toArray(OpaBuiltin.Builtin[]::new))
                             .build();

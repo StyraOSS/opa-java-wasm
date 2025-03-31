@@ -26,45 +26,46 @@ public class OpaTest {
                         .withMemory(new ByteBufferMemory(new MemoryLimits(2, 2)))
                         .withInputStream(new FileInputStream(wasmFile.toFile()))
                         .build();
+        var opaExports = opa.exports();
 
-        assertEquals(opa.opaWasmAbiVersion().getValue(), 1L);
-        assertEquals(opa.opaWasmAbiMinorVersion().getValue(), 3L);
+        assertEquals(opaExports.opaWasmAbiVersion().getValue(), 1L);
+        assertEquals(opaExports.opaWasmAbiMinorVersion().getValue(), 3L);
 
-        var builtinsAddr = opa.builtins();
-        var builtinsStringAddr = opa.opaJsonDump(builtinsAddr);
-        assertEquals("{}", opa.memory().readCString(builtinsStringAddr));
+        var builtinsAddr = opaExports.builtins();
+        var builtinsStringAddr = opaExports.opaJsonDump(builtinsAddr);
+        assertEquals("{}", opaExports.memory().readCString(builtinsStringAddr));
 
         // Following the instructions here:
         // https://www.openpolicyagent.org/docs/latest/wasm/#evaluation
-        var ctxAddr = opa.opaEvalCtxNew();
+        var ctxAddr = opaExports.opaEvalCtxNew();
 
         var input = "{\"user\": \"alice\"}";
-        var inputStrAddr = opa.opaMalloc(input.length());
-        opa.memory().writeCString(inputStrAddr, input);
-        var inputAddr = opa.opaJsonParse(inputStrAddr, input.length());
-        opa.opaFree(inputStrAddr);
-        opa.opaEvalCtxSetInput(ctxAddr, inputAddr);
+        var inputStrAddr = opaExports.opaMalloc(input.length());
+        opaExports.memory().writeCString(inputStrAddr, input);
+        var inputAddr = opaExports.opaJsonParse(inputStrAddr, input.length());
+        opaExports.opaFree(inputStrAddr);
+        opaExports.opaEvalCtxSetInput(ctxAddr, inputAddr);
 
         var data = "{ \"role\" : { \"alice\" : \"admin\", \"bob\" : \"user\" } }";
-        var dataStrAddr = opa.opaMalloc(data.length());
-        opa.memory().writeCString(dataStrAddr, data);
-        var dataAddr = opa.opaJsonParse(dataStrAddr, data.length());
-        opa.opaFree(dataStrAddr);
-        opa.opaEvalCtxSetData(ctxAddr, dataAddr);
+        var dataStrAddr = opaExports.opaMalloc(data.length());
+        opaExports.memory().writeCString(dataStrAddr, data);
+        var dataAddr = opaExports.opaJsonParse(dataStrAddr, data.length());
+        opaExports.opaFree(dataStrAddr);
+        opaExports.opaEvalCtxSetData(ctxAddr, dataAddr);
 
-        var evalResult = OpaErrorCode.fromValue(opa.eval(ctxAddr));
+        var evalResult = OpaErrorCode.fromValue(opaExports.eval(ctxAddr));
         assertEquals(OpaErrorCode.OPA_ERR_OK, evalResult);
 
-        int resultAddr = opa.opaEvalCtxGetResult(ctxAddr);
-        int resultStrAddr = opa.opaJsonDump(resultAddr);
-        var resultStr = opa.memory().readCString(resultStrAddr);
-        opa.opaFree(resultStrAddr);
+        int resultAddr = opaExports.opaEvalCtxGetResult(ctxAddr);
+        int resultStrAddr = opaExports.opaJsonDump(resultAddr);
+        var resultStr = opaExports.memory().readCString(resultStrAddr);
+        opaExports.opaFree(resultStrAddr);
         assertEquals("[{\"result\":true}]", resultStr);
 
         // final cleanup of resources for demo purposes
-        opa.opaValueFree(inputAddr);
-        opa.opaValueFree(dataAddr);
-        opa.opaValueFree(resultAddr);
+        opaExports.opaValueFree(inputAddr);
+        opaExports.opaValueFree(dataAddr);
+        opaExports.opaValueFree(resultAddr);
     }
 
     @Test
