@@ -30,8 +30,9 @@
     <module>core</module>
   </modules>
 
-  <scm>
-    <connection>scm:git@github.com:StyraInc/opa-java-wasm.git</connection>
+  <scm child.scm.connection.inherit.append.path="false" child.scm.developerConnection.inherit.append.path="false" child.scm.url.inherit.append.path="false">
+    <connection>scm:git:https://github.com/StyraInc/opa-java-wasm.git</connection>
+    <developerConnection>scm:git@github.com:StyraInc/opa-java-wasm.git</developerConnection>
     <url>https://github.com/StyraInc/opa-java-wasm.git</url>
   </scm>
 
