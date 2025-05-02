@@ -98,7 +98,6 @@ public class OpaTest {
     @Test
     public void issue69() throws Exception {
         var policy = OpaPolicy.builder().withPolicy(issue69WasmFile).build();
-        policy.data("");
 
         policy.input("{\"method\":\"GET\"}");
         Assertions.assertTrue(Utils.getResult(policy.evaluate()).asBoolean());

@@ -93,6 +93,11 @@ public class OpaPolicy {
     }
 
     public OpaPolicy input(String input) {
+        if (this.dataAddr == -1) {
+            // to keep the ordering: data - input - evaluate
+            data("");
+        }
+
         var inputLen = input.getBytes().length;
         var delta = this.dataHeapPtr + inputLen - (wasm.memory().pages() * Memory.PAGE_SIZE);
         if (delta > 0) {
