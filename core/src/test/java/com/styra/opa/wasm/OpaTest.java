@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 
 public class OpaTest {
     static Path wasmFile;
+    static Path issue69WasmFile;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
         wasmFile = OpaCli.compile("base", "opa/wasm/test/allowed").resolve("policy.wasm");
+        issue69WasmFile = OpaCli.compile("issue69", "authz/allow").resolve("policy.wasm");
     }
 
     @Test
@@ -90,6 +92,18 @@ public class OpaTest {
 
         // evaluate a user
         policy.input("{\"user\": \"alice\"}");
+        Assertions.assertFalse(Utils.getResult(policy.evaluate()).asBoolean());
+    }
+
+    @Test
+    public void issue69() throws Exception {
+        var policy = OpaPolicy.builder().withPolicy(issue69WasmFile).build();
+        policy.data("");
+
+        policy.input("{\"method\":\"GET\"}");
+        Assertions.assertTrue(Utils.getResult(policy.evaluate()).asBoolean());
+
+        policy.input("{\"method\":\"POST\"}");
         Assertions.assertFalse(Utils.getResult(policy.evaluate()).asBoolean());
     }
 }
