@@ -91,7 +91,7 @@ jobs:
           MAVEN_OPTS: "-Dmaven.repo.local=${{ github.workspace }}/repository"
       # Test root Readme
       - name: jbang
-        uses: jbangdev/jbang-action@ab299fcef021bf9ec212dacb6b8d97c0265017f9 # tag=v0.126.0
+        uses: jbangdev/jbang-action@ad9de817ea5f3612cf6f32d82249bc5443191818 # tag=v0.126.1
         with:
           script: Readme.md
         env:
