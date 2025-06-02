@@ -15,7 +15,7 @@
     </dependency>
     <dependency>
       <groupId>com.dylibso.chicory</groupId>
-      <artifactId>host-module-annotations-experimental</artifactId>
+      <artifactId>annotations</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -62,7 +62,7 @@
           <annotationProcessorPaths>
             <path>
               <groupId>com.dylibso.chicory</groupId>
-              <artifactId>host-module-processor-experimental</artifactId>
+              <artifactId>annotations-processor</artifactId>
             </path>
           </annotationProcessorPaths>
         </configuration>

@@ -1,6 +1,6 @@
 package com.styra.opa.wasm;
 
-import com.dylibso.chicory.experimental.hostmodule.annotations.WasmModuleInterface;
+import com.dylibso.chicory.annotations.WasmModuleInterface;
 import com.dylibso.chicory.runtime.Instance;
 import com.dylibso.chicory.runtime.Memory;
 import com.dylibso.chicory.wasm.Parser;
