@@ -146,6 +146,7 @@ public class OpaTestCasesTest {
                 OpaPolicy.builder()
                         .addBuiltins(customBuiltins)
                         .withPolicy(data.getPolicy())
+                        .disableCompiler()
                         .build();
         assertEquals(1, policy.entrypoints().size());
 
