@@ -188,6 +188,7 @@ public class OpaPolicy {
         private int maxMemory = DEFAULT_MEMORY_MAX;
         private List<OpaBuiltin.Builtin> builtins = new ArrayList<>();
         protected boolean defaultBuiltins = true;
+        private boolean enableCompiler = true;
 
         private Builder() {}
 
@@ -248,6 +249,11 @@ public class OpaPolicy {
             return this;
         }
 
+        public Builder disableCompiler() {
+            this.enableCompiler = false;
+            return this;
+        }
+
         public OpaPolicy build() {
             // Default management
             if (jsonMapper == null) {
@@ -258,7 +264,7 @@ public class OpaPolicy {
             }
             Objects.requireNonNull(is);
 
-            var wasm =
+            var wasmBuilder =
                     OpaWasm.builder()
                             .withInputStream(is)
                             .withJsonMapper(jsonMapper)
@@ -266,10 +272,13 @@ public class OpaPolicy {
                             .withMemory(
                                     new ByteArrayMemory(new MemoryLimits(initialMemory, maxMemory)))
                             .withDefaultBuiltins(defaultBuiltins)
-                            .addBuiltins(builtins.toArray(OpaBuiltin.Builtin[]::new))
-                            .build();
+                            .addBuiltins(builtins.toArray(OpaBuiltin.Builtin[]::new));
 
-            return new OpaPolicy(wasm);
+            if (!enableCompiler) {
+                wasmBuilder.disableCompiler();
+            }
+
+            return new OpaPolicy(wasmBuilder.build());
         }
     }
 }

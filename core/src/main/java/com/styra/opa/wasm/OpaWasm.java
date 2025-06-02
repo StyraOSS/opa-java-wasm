@@ -1,6 +1,7 @@
 package com.styra.opa.wasm;
 
 import com.dylibso.chicory.annotations.WasmModuleInterface;
+import com.dylibso.chicory.compiler.MachineFactoryCompiler;
 import com.dylibso.chicory.runtime.Instance;
 import com.dylibso.chicory.runtime.Memory;
 import com.dylibso.chicory.wasm.Parser;
@@ -33,15 +34,21 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
             ObjectMapper yamlMapper,
             Memory memory,
             boolean defaultBuiltins,
+            boolean enableCompiler,
             OpaBuiltin.Builtin[] builtins) {
         this.jsonMapper = jsonMapper;
         this.yamlMapper = yamlMapper;
         this.memory = memory;
-        this.instance =
+        var instanceBuilder =
                 Instance.builder(Parser.parse(is))
                         .withImportValues(toImportValues())
-                        .withMemoryFactory(limits -> memory)
-                        .build();
+                        .withMemoryFactory(limits -> memory);
+
+        if (enableCompiler) {
+            instanceBuilder.withMachineFactory(MachineFactoryCompiler::compile);
+        }
+
+        this.instance = instanceBuilder.build();
         this.exports = new OpaWasm_ModuleExports(instance);
         this.builtins = initializeBuiltins(defaultBuiltins, builtins);
     }
@@ -94,6 +101,7 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
         private Memory memory;
         private List<OpaBuiltin.Builtin> builtins = new ArrayList<>();
         protected boolean defaultBuiltins = true;
+        private boolean enableCompiler = true;
 
         private Builder() {}
 
@@ -129,6 +137,11 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
             return this;
         }
 
+        public Builder disableCompiler() {
+            this.enableCompiler = false;
+            return this;
+        }
+
         public OpaWasm build() {
             return new OpaWasm(
                     is,
@@ -136,6 +149,7 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
                     yamlMapper,
                     memory,
                     defaultBuiltins,
+                    enableCompiler,
                     builtins.toArray(OpaBuiltin.Builtin[]::new));
         }
     }
