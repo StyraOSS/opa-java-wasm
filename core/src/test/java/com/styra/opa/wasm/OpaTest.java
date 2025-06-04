@@ -105,4 +105,86 @@ public class OpaTest {
         policy.input("{\"method\":\"POST\"}");
         Assertions.assertFalse(Utils.getResult(policy.evaluate()).asBoolean());
     }
+
+    @Test
+    public void issue78Sprintf() throws Exception {
+        var policyWasm =
+                OpaCli.compile("issue78-sprintf", "armo_builtins/deny").resolve("policy.wasm");
+        var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
+        var pod =
+                "apiVersion: v1\n"
+                        + "kind: Pod\n"
+                        + "metadata:\n"
+                        + "  name: static-web\n"
+                        + "  labels:\n"
+                        + "    role: myrole\n"
+                        + "spec:\n"
+                        + "  securityContext:\n"
+                        + "    runAsNonRoot: false\n"
+                        + "  containers:\n"
+                        + "    - name: web\n"
+                        + "      image: nginx\n"
+                        + "      ports:\n"
+                        + "        - name: web\n"
+                        + "          containerPort: 80\n"
+                        + "          protocol: TCP\n"
+                        + "      securityContext:\n"
+                        + "        runAsGroup: 1000\n";
+
+        // should be an array of Pods
+        var rawInput = DefaultMappers.jsonMapper.createArrayNode();
+        rawInput.add(DefaultMappers.yamlMapper.readTree(pod));
+
+        var input = DefaultMappers.jsonMapper.writeValueAsString(rawInput);
+
+        var result = policy.evaluate(input);
+
+        var resultNode = Utils.getResult(result).get(0);
+        var alertMessage = resultNode.get("alertMessage").asText();
+        var alertScore = resultNode.get("alertScore").asInt();
+
+        assertEquals("container: web in pod: static-web  may run as root", alertMessage);
+        assertEquals(7, alertScore);
+    }
+
+    @Test
+    public void issue78Updated() throws Exception {
+        var policyWasm =
+                OpaCli.compile("issue78-updated", "armo_builtins/deny").resolve("policy.wasm");
+        var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
+        var pod =
+                "apiVersion: v1\n"
+                        + "kind: Pod\n"
+                        + "metadata:\n"
+                        + "  name: static-web\n"
+                        + "  labels:\n"
+                        + "    role: myrole\n"
+                        + "spec:\n"
+                        + "  securityContext:\n"
+                        + "    runAsNonRoot: false\n"
+                        + "  containers:\n"
+                        + "    - name: web\n"
+                        + "      image: nginx\n"
+                        + "      ports:\n"
+                        + "        - name: web\n"
+                        + "          containerPort: 80\n"
+                        + "          protocol: TCP\n"
+                        + "      securityContext:\n"
+                        + "        runAsGroup: 1000";
+
+        // should be an array of Pods
+        var rawInput = DefaultMappers.jsonMapper.createArrayNode();
+        rawInput.add(DefaultMappers.yamlMapper.readTree(pod));
+
+        var input = DefaultMappers.jsonMapper.writeValueAsString(rawInput);
+
+        var result = policy.evaluate(input);
+
+        var resultNode = Utils.getResult(result).get(0);
+        var alertMessage = resultNode.get("alertMessage").asText();
+        var alertScore = resultNode.get("alertScore").asInt();
+
+        assertEquals("container: web in pod: static-web may run as root", alertMessage);
+        assertEquals(7, alertScore);
+    }
 }

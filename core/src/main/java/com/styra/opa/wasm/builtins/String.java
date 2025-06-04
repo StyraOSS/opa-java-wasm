@@ -60,6 +60,11 @@ public class String {
 
         // Apply formatting using String.format
         try {
+            // %v partial support
+            if (format.contains("%v")) {
+                format = format.replaceAll("%v", "%s");
+            }
+
             var result = java.lang.String.format(format, args.toArray());
             return TextNode.valueOf(result);
         } catch (IllegalArgumentException e) {
