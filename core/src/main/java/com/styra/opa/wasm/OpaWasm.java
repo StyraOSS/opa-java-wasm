@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Low level bindings to OPA
 @WasmModuleInterface("demo-policy.wasm")
@@ -71,14 +72,14 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
             throw new RuntimeException(e);
         }
 
-        var result = new OpaBuiltin.Builtin[mappings.size()];
+        Map<Integer, OpaBuiltin.Builtin> result = new HashMap<>();
         // Default initialization to have proper error messages
         for (var m : mappings.entrySet()) {
-            result[m.getValue()] = () -> m.getKey();
+            result.put(m.getValue(), () -> m.getKey());
         }
         for (var builtin : builtins) {
             if (mappings.containsKey(builtin.name())) {
-                result[mappings.get(builtin.name())] = builtin;
+                result.put(mappings.get(builtin.name()), builtin);
             }
         }
         if (defaultBuiltins) {
@@ -86,11 +87,22 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
             var all = Provided.all();
             for (var builtin : all) {
                 if (mappings.containsKey(builtin.name())) {
-                    result[mappings.get(builtin.name())] = builtin;
+                    result.put(mappings.get(builtin.name()), builtin);
                 }
             }
         }
-        return result;
+
+        int size = result.keySet().stream().mapToInt(i -> i + 1).max().orElse(0);
+        var finalResult = new OpaBuiltin.Builtin[size];
+        for (int i = 0; i < size; i++) {
+            if (result.containsKey(i)) {
+                finalResult[i] = result.get(i);
+            } else {
+                finalResult[i] = null;
+            }
+        }
+
+        return finalResult;
     }
 
     public static class Builder {
