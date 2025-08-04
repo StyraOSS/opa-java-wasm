@@ -2,13 +2,13 @@
 [![GitHub Release](https://img.shields.io/github/tag/StyraInc/opa-java-wasm.svg?style=flat&color=green)](https://github.com/StyraInc/opa-java-wasm/tags)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.styra.opa/opa-java-wasm/badge.svg?style=flat&color=green)](https://central.sonatype.com/artifact/com.styra.opa/opa-java-wasm)
 
-# Open Policy Agent WebAssembly Java SDK (experimental)
+# Open Policy Agent WebAssembly Java SDK
 
 This is an SDK for using WebAssembly(wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
 with Java powered by [Chicory](https://github.com/dylibso/chicory), a pure Java Wasm interpreter.
 
 Initial implementation was based
-on [Open Policy Agent WebAssemby NPM Module](https://github.com/open-policy-agent/npm-opa-wasm)
+on [Open Policy Agent WebAssembly NPM Module](https://github.com/open-policy-agent/npm-opa-wasm)
 and [Open Policy Agent WebAssembly dotnet core SDK](https://github.com/me-viper/OpaDotNet)
 
 ## Why
@@ -73,7 +73,7 @@ import com.styra.opa.wasm.OpaPolicy;
 var policy = OpaPolicy.builder().withPolicy(policyWasm).build();
 ```
 
-The `policyWasm` ca be a variety of things, including raw byte array, `InputStream`, `Path`, `File`.
+The `policyWasm` can be a variety of things, including raw byte array, `InputStream`, `Path`, `File`.
 The content should be the compiled policy Wasm file, a valid WebAssembly module.
 
 For example:
