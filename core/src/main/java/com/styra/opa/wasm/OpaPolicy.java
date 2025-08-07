@@ -29,7 +29,6 @@ public class OpaPolicy {
     private int dataHeapPtr = -1;
     private int dataAddr = -1;
     private int inputAddr = -1;
-    private int resultAddr = -1;
     private int entrypoint;
 
     private OpaPolicy(OpaWasm wasm) {
@@ -78,6 +77,10 @@ public class OpaPolicy {
     // data MUST be a serializable object or ArrayBuffer, which assumed to be a well-formed
     // stringified JSON
     public OpaPolicy data(String data) {
+        if (this.dataAddr != -1) {
+            wasm.exports().opaValueFree(this.dataAddr);
+        }
+
         wasm.exports().opaHeapPtrSet(this.baseHeapPtr);
         this.dataAddr = loadJson(data);
         this.dataHeapPtr = wasm.exports().opaHeapPtrGet();
@@ -96,6 +99,9 @@ public class OpaPolicy {
         if (this.dataAddr == -1) {
             // to keep the ordering: data - input - evaluate
             data("");
+        } else {
+            // Reset the heap pointer before each evaluation
+            wasm.exports().opaHeapPtrSet(this.dataHeapPtr);
         }
 
         var inputLen = input.getBytes().length;
@@ -152,8 +158,9 @@ public class OpaPolicy {
                     "Error evaluating the Opa Policy, returned code is: " + evalResult);
         }
 
-        this.resultAddr = wasm.exports().opaEvalCtxGetResult(ctxAddr);
+        var resultAddr = wasm.exports().opaEvalCtxGetResult(ctxAddr);
         var result = dumpJson(resultAddr);
+        wasm.exports().opaFree(resultAddr);
         return result;
     }
 

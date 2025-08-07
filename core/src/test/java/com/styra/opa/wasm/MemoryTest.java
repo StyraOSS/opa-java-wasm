@@ -64,7 +64,7 @@ public class MemoryTest {
                         .withPolicy(wasmFile)
                         .build();
         var input = new String(new char[2 * 65536]).replace("\0", "a");
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 100000; i++) {
             assertDoesNotThrow(() -> policy.evaluate(input));
         }
     }
