@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.dylibso.chicory.runtime.ByteBufferMemory;
 import com.dylibso.chicory.wasm.types.MemoryLimits;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,11 +14,13 @@ import org.junit.jupiter.api.Test;
 public class OpaTest {
     static Path wasmFile;
     static Path issue69WasmFile;
+    static Path issue107WasmFile;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
         wasmFile = OpaCli.compile("base", "opa/wasm/test/allowed").resolve("policy.wasm");
         issue69WasmFile = OpaCli.compile("issue69", "authz/allow").resolve("policy.wasm");
+        issue107WasmFile = OpaCli.compile("issue107", "test").resolve("policy.wasm");
     }
 
     @Test
@@ -104,6 +107,21 @@ public class OpaTest {
 
         policy.input("{\"method\":\"POST\"}");
         Assertions.assertFalse(Utils.getResult(policy.evaluate()).asBoolean());
+    }
+
+    @Test
+    public void issue107() throws Exception {
+        var policy = OpaPolicy.builder().withPolicy(issue107WasmFile).build();
+
+        policy.input("{\"role\": \"admin\",\"name\": \"Doe\"}");
+        var result = policy.evaluate();
+        Assertions.assertTrue(Utils.getResult(result).get("allow").asBoolean());
+
+        var input = "{\"role\": \"admin\",\"name\": \"Štěpán\"}";
+
+        policy.input(input);
+        result = policy.evaluate();
+        Assertions.assertTrue(Utils.getResult(result).get("allow").asBoolean());
     }
 
     @Test
