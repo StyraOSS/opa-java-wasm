@@ -4,23 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dylibso.chicory.runtime.ByteBufferMemory;
 import com.dylibso.chicory.wasm.types.MemoryLimits;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.FileInputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import org.instancio.Instancio;
+import org.instancio.junit.Given;
+import org.instancio.junit.GivenProvider;
+import org.instancio.junit.InstancioExtension;
+import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
 
+@ExtendWith(InstancioExtension.class)
 public class OpaTest {
     static Path wasmFile;
     static Path issue69WasmFile;
-    static Path issue107WasmFile;
+    static OpaPolicy issue107Policy;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
         wasmFile = OpaCli.compile("base", "opa/wasm/test/allowed").resolve("policy.wasm");
         issue69WasmFile = OpaCli.compile("issue69", "authz/allow").resolve("policy.wasm");
-        issue107WasmFile = OpaCli.compile("issue107", "test").resolve("policy.wasm");
+        issue107Policy =
+                OpaPolicy.builder()
+                        .withPolicy(OpaCli.compile("issue107", "test").resolve("policy.wasm"))
+                        .build();
     }
 
     @Test
@@ -110,8 +121,8 @@ public class OpaTest {
     }
 
     @Test
-    public void issue107() throws Exception {
-        var policy = OpaPolicy.builder().withPolicy(issue107WasmFile).build();
+    public void issue107() {
+        var policy = issue107Policy;
 
         policy.input("{\"role\": \"admin\",\"name\": \"Doe\"}");
         var result = policy.evaluate();
@@ -122,6 +133,36 @@ public class OpaTest {
         policy.input(input);
         result = policy.evaluate();
         Assertions.assertTrue(Utils.getResult(result).get("allow").asBoolean());
+    }
+
+    static class InputStringProvider implements GivenProvider {
+        @Override
+        public Object provide(ElementContext context) {
+            String randomName = Instancio.gen().string().unicode().mixedCase().get();
+            try {
+                String input = "{\"role\": \"admin\",\"name\": \"" + randomName + "\"}";
+                DefaultMappers.jsonMapper.readTree(input);
+                return randomName;
+            } catch (JsonProcessingException e) {
+                // the generated input name breaks the json escaping
+                return provide(context);
+            }
+        }
+    }
+
+    @InstancioSource(samples = 1000)
+    @ParameterizedTest
+    public void issue107Parametrized(@Given(InputStringProvider.class) String name) {
+        var policy = issue107Policy;
+
+        policy.input("{\"role\": \"admin\",\"name\": \"" + name + "\"}");
+        var result = policy.evaluate();
+        Assertions.assertTrue(Utils.getResult(result).get("allow").asBoolean());
+
+        policy.input("{\"role\": \"notadmin\",\"name\": \"" + name + "\"}");
+
+        result = policy.evaluate();
+        Assertions.assertFalse(Utils.getResult(result).get("allow").asBoolean());
     }
 
     @Test

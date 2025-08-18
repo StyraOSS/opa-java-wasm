@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,9 +61,10 @@ public class OpaPolicy {
     }
 
     private int loadJson(String data) {
-        var dataStrAddr = wasm.exports().opaMalloc(data.length());
-        wasm.memory().writeCString(dataStrAddr, data);
-        var dstAddr = wasm.exports().opaJsonParse(dataStrAddr, data.length());
+        var dataBytes = data.getBytes(StandardCharsets.UTF_8);
+        var dataStrAddr = wasm.exports().opaMalloc(dataBytes.length);
+        wasm.memory().write(dataStrAddr, dataBytes);
+        var dstAddr = wasm.exports().opaJsonParse(dataStrAddr, dataBytes.length);
         wasm.exports().opaFree(dataStrAddr);
         return dstAddr;
     }
