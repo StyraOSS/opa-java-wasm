@@ -54,7 +54,7 @@
     <junit.version>5.13.4</junit.version>
     <chicory.version>1.5.1</chicory.version>
     <jackson.version>2.20.0</jackson.version>
-    <spotless.version>2.46.1</spotless.version>
+    <spotless.version>3.0.0</spotless.version>
   </properties>
   <dependencyManagement>
     <dependencies>
