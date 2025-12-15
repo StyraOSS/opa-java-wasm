@@ -30,7 +30,7 @@ jobs:
     - name: Prep OPA cases
       working-directory: opa
       run: WASM_BUILD_ONLY=true make wasm-rego-test
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: testcases
         path: opa/.go/cache/testcases.tar.gz
