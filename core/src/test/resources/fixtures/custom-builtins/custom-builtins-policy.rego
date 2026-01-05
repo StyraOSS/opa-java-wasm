@@ -2,7 +2,7 @@ package custom_builtins
 
 zero_arg() := custom.zeroArgBuiltin()
 
-one_arg() := custom.oneArgBuiltin(input.args[0])
+one_arg := custom.oneArgBuiltin(input.args[0])
 
 two_arg() := custom.twoArgBuiltin(
     input.args[0],
