@@ -43,7 +43,7 @@ jobs:
       matrix:
         java-version: [11, 17, 21]
         opa-version:
-        - 0.70.0 # latest
+        - 1.12.1 # latest
 
     steps:
     - uses: actions/checkout@v6

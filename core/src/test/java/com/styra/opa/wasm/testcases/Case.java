@@ -32,6 +32,9 @@ public class Case {
     @JsonProperty("wasm")
     private String wasm;
 
+    @JsonProperty("ignore_generated_vars")
+    private boolean ignoreGeneratedVars;
+
     Case() {}
 
     public String note() {
@@ -68,6 +71,10 @@ public class Case {
 
     public String wasm() {
         return wasm;
+    }
+
+    public boolean ignoreGeneratedVars() {
+        return ignoreGeneratedVars;
     }
 
     @Override
