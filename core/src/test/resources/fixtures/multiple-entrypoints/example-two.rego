@@ -2,14 +2,13 @@ package example.two
 
 import data.example.two.coolRule
 
-default theirRule = false
+default theirRule := false
+default ourRule := false
 
-default ourRule = false
-
-theirRule {
-	input.anyProp == "aValue"
+theirRule if {
+    input.anyProp == "aValue"
 }
 
-ourRule {
-	input.ourProp == "inTheMiddleOfTheStreet"
+ourRule if {
+    input.ourProp == "inTheMiddleOfTheStreet"
 }

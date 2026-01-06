@@ -1,8 +1,8 @@
 package opa.wasm.test
 
-default allowed = false
+default allowed := false
 
-allowed {
+allowed if {
     user := input.user
     data.role[user] == "admin"
 }

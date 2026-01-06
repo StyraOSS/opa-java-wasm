@@ -2,14 +2,13 @@ package example.one
 
 import data.example.one.myCompositeRule
 
-default myRule = false
+default myRule := false
+default myOtherRule := false
 
-default myOtherRule = false
-
-myRule {
-	input.someProp == "thisValue"
+myRule if {
+    input.someProp == "thisValue"
 }
 
-myOtherRule {
-	input.anotherProp == "thatValue"
+myOtherRule if {
+    input.anotherProp == "thatValue"
 }

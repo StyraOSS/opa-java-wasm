@@ -1,25 +1,27 @@
 package custom_builtins
 
-zero_arg = x {
-  x = custom.zeroArgBuiltin()
-}
+zero_arg := custom.zeroArgBuiltin()
 
-one_arg = x {
-    x = custom.oneArgBuiltin(input.args[0])
-}
+one_arg := custom.oneArgBuiltin(input.args[0])
 
-two_arg = x {
-    x = custom.twoArgBuiltin(input.args[0], input.args[1])
-}
+two_arg := custom.twoArgBuiltin(
+    input.args[0],
+    input.args[1],
+)
 
-three_arg = x {
-    x = custom.threeArgBuiltin(input.args[0], input.args[1], input.args[2])
-}
+three_arg := custom.threeArgBuiltin(
+    input.args[0],
+    input.args[1],
+    input.args[2],
+)
 
-four_arg = x {
-    x = custom.fourArgBuiltin(input.args[0], input.args[1], input.args[2], input.args[3])
-}
+four_arg := custom.fourArgBuiltin(
+    input.args[0],
+    input.args[1],
+    input.args[2],
+    input.args[3],
+)
 
-valid_json {
+valid_json if {
     json.is_valid("{}")
 }
