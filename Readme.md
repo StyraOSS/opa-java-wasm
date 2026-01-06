@@ -135,7 +135,7 @@ At the moment the following builtins are supported(and, by default, automaticall
 ### Writing the policy
 
 See
-[https://www.openpolicyagent.org/docs/envoy/primer](https://www.openpolicyagent.org/docs/envoy/primer)
+[https://www.openpolicyagent.org/docs/policy-language](https://www.openpolicyagent.org/docs/policy-language)
 
 ### Compiling the policy
 
