@@ -64,8 +64,12 @@ jobs:
       with:
         version: ${{ matrix.opa-version }}
 
+    - name: Check formatting
+      if: matrix.java-version >= 17
+      run: mvn -B spotless:check
+
     - name: Test opa-java-wasm
-      run: mvn -B spotless:apply clean install
+      run: mvn -B install
 
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v6
