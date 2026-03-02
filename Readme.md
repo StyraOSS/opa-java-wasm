@@ -117,6 +117,51 @@ Files.write(Paths.get("TestReadme.result"), (result + "\n").getBytes());
 > [https://www.openpolicyagent.org/docs/latest/wasm/](https://www.openpolicyagent.org/docs/latest/wasm/)
 > for more details.
 
+## Policy Pool
+
+`OpaPolicyPool` manages a bounded set of `OpaPolicy` instances for concurrent
+use.  It uses lock-free data structures internally, so it is safe to use with
+virtual threads (no carrier-thread pinning).
+
+```java
+import com.styra.opa.wasm.OpaPolicyPool;
+
+var pool = OpaPolicyPool.create(
+        () -> OpaPolicy.builder().withPolicy(policyWasm).build(),
+        4); // at most 4 concurrent instances
+
+try (var loan = pool.borrow()) {    // blocks if all 4 are in use
+    loan.policy()
+        .data("{\"role\": {\"alice\": \"admin\"}}")
+        .input("{\"user\": \"alice\"}");
+    String result = loan.policy().evaluate();
+}
+// policy is automatically returned to the pool
+
+pool.close();
+```
+
+Each policy is reset to a clean state when returned to the pool (data, input
+and entrypoint are cleared), so the next borrower always starts fresh.
+
+If a processing error may have left the policy in a bad state, call
+`loan.discard()` instead of letting `close()` return it:
+
+```java
+try (var loan = pool.borrow()) {
+    try {
+        loan.policy().data(data).input(input);
+        result = loan.policy().evaluate();
+    } catch (RuntimeException ex) {
+        loan.discard(); // destroys this instance; pool will create a fresh one
+        // handle error ...
+    }
+}
+```
+
+> **Note:** A single `OpaPolicy` instance is **not thread-safe**.
+> Without the pool, use one instance per thread.
+
 ## Builtins support:
 
 At the moment the following builtins are supported(and, by default, automatically injected when needed):

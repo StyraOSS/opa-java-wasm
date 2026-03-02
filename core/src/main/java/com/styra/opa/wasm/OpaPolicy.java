@@ -180,6 +180,18 @@ public class OpaPolicy {
         return evaluate();
     }
 
+    /** Package-private: used by {@link OpaPolicyPool} on return. */
+    void reset() {
+        if (dataAddr != -1) {
+            wasm.exports().opaValueFree(dataAddr);
+        }
+        wasm.exports().opaHeapPtrSet(baseHeapPtr);
+        dataHeapPtr = baseHeapPtr;
+        dataAddr = -1;
+        inputAddr = -1;
+        entrypoint = 0;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
