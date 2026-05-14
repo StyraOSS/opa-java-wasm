@@ -16,7 +16,8 @@ public class OpaStringBuiltinsTest {
                                 "string-builtins",
                                 "string_builtins/invoke_sprintf",
                                 "string_builtins/integer_fastpath",
-                                "string_builtins/string_example")
+                                "string_builtins/string_example",
+                                "string_builtins/quoted")
                         .resolve("policy.wasm");
     }
 
@@ -45,5 +46,17 @@ public class OpaStringBuiltinsTest {
         var result = Utils.getResult(opa.entrypoint("string_builtins/string_example").evaluate());
 
         assertEquals("my string", result.get("printed").asText());
+    }
+
+    @Test
+    public void quoted() {
+        var opa = OpaPolicy.builder().withPolicy(wasmFile).build();
+
+        var result =
+                Utils.getResult(
+                        opa.entrypoint("string_builtins/quoted")
+                                .evaluate("{\"value\": \"String\"}"));
+
+        assertEquals("requested \"String\" is invalid", result.get("printed").asText());
     }
 }

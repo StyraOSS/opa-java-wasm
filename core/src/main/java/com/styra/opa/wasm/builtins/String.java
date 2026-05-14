@@ -64,6 +64,10 @@ public class String {
             if (format.contains("%v")) {
                 format = format.replaceAll("%v", "%s");
             }
+            // %q wraps the string in double quotes (Go/Rego semantics)
+            if (format.contains("%q")) {
+                format = format.replace("%q", "\"%s\"");
+            }
 
             var result = java.lang.String.format(format, args.toArray());
             return TextNode.valueOf(result);
