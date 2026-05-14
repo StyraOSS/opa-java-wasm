@@ -11,3 +11,7 @@ integer_fastpath := {
 string_example := {
   "printed": sprintf("%s", ["my string"])
 }
+
+quoted := {
+  "printed": sprintf("requested %q is invalid", [input.value])
+}
