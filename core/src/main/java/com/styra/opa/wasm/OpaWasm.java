@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.styra.opa.wasm.builtins.Provided;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,9 +196,10 @@ public class OpaWasm implements OpaWasm_ModuleImports, OpaWasm_Env {
     }
 
     public int writeResult(String result) {
-        var resultStrAddr = exports.opaMalloc(result.length());
-        memory().writeCString(resultStrAddr, result);
-        var resultAddr = exports.opaJsonParse(resultStrAddr, result.length());
+        var bytes = result.getBytes(StandardCharsets.UTF_8);
+        var resultStrAddr = exports.opaMalloc(bytes.length);
+        memory().write(resultStrAddr, bytes);
+        var resultAddr = exports.opaJsonParse(resultStrAddr, bytes.length);
         exports.opaFree(resultStrAddr);
         return resultAddr;
     }
