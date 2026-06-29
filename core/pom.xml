@@ -10,15 +10,15 @@
   <name>Java Opa Wasm</name>
   <dependencies>
     <dependency>
-      <groupId>com.dylibso.chicory</groupId>
+      <groupId>run.endive</groupId>
       <artifactId>runtime</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.dylibso.chicory</groupId>
+      <groupId>run.endive</groupId>
       <artifactId>compiler</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.dylibso.chicory</groupId>
+      <groupId>run.endive</groupId>
       <artifactId>annotations</artifactId>
     </dependency>
     <dependency>
@@ -71,7 +71,7 @@
         <configuration>
           <annotationProcessorPaths>
             <path>
-              <groupId>com.dylibso.chicory</groupId>
+              <groupId>run.endive</groupId>
               <artifactId>annotations-processor</artifactId>
             </path>
           </annotationProcessorPaths>

@@ -6,7 +6,7 @@
   <version>999-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OPA Wasm for Java</name>
-  <description>Evaluate OPA policies in Wasm using the Chicory runtime</description>
+  <description>Evaluate OPA policies in Wasm using the Endive runtime</description>
   <url>https://github.com/StyraInc/opa-java-wasm</url>
 
   <licenses>
@@ -52,16 +52,16 @@
     <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.14.4</junit.version>
-    <chicory.version>1.7.5</chicory.version>
+    <endive.version>1.0.0</endive.version>
     <jackson.version>2.22.0</jackson.version>
     <spotless.version>3.7.0</spotless.version>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.dylibso.chicory</groupId>
+        <groupId>run.endive</groupId>
         <artifactId>bom</artifactId>
-        <version>${chicory.version}</version>
+        <version>${endive.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

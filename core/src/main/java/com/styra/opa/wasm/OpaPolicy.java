@@ -1,8 +1,5 @@
 package com.styra.opa.wasm;
 
-import com.dylibso.chicory.runtime.ByteArrayMemory;
-import com.dylibso.chicory.runtime.Memory;
-import com.dylibso.chicory.wasm.types.MemoryLimits;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import run.endive.runtime.ByteArrayMemory;
+import run.endive.runtime.Memory;
+import run.endive.wasm.types.MemoryLimits;
 
 // final user API
 // directly porting:
@@ -109,7 +109,7 @@ public class OpaPolicy {
         var inputLen = input.getBytes().length;
         var delta = this.dataHeapPtr + inputLen - (wasm.memory().pages() * Memory.PAGE_SIZE);
         if (delta > 0) {
-            // TODO: similar logic might go into Chicory itself?
+            // TODO: similar logic might go into Endive itself?
             var pageSize = (int) Math.ceil(delta / Memory.PAGE_SIZE);
             var grown = wasm.memory().grow(pageSize);
             if (grown == -1) {

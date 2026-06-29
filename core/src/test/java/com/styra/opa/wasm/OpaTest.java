@@ -2,8 +2,6 @@ package com.styra.opa.wasm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.dylibso.chicory.runtime.ByteBufferMemory;
-import com.dylibso.chicory.wasm.types.MemoryLimits;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.FileInputStream;
 import java.nio.file.Path;
@@ -17,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import run.endive.runtime.ByteBufferMemory;
+import run.endive.wasm.types.MemoryLimits;
 
 @ExtendWith(InstancioExtension.class)
 public class OpaTest {
