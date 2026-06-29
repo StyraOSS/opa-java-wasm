@@ -1,10 +1,5 @@
 package com.styra.opa.wasm;
 
-import com.dylibso.chicory.annotations.WasmModuleInterface;
-import com.dylibso.chicory.compiler.MachineFactoryCompiler;
-import com.dylibso.chicory.runtime.Instance;
-import com.dylibso.chicory.runtime.Memory;
-import com.dylibso.chicory.wasm.Parser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.styra.opa.wasm.builtins.Provided;
@@ -14,6 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import run.endive.annotations.WasmModuleInterface;
+import run.endive.compiler.MachineFactoryCompiler;
+import run.endive.runtime.Instance;
+import run.endive.runtime.Memory;
+import run.endive.wasm.Parser;
 
 // Low level bindings to OPA
 @WasmModuleInterface("demo-policy.wasm")

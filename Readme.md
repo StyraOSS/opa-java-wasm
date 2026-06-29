@@ -5,7 +5,7 @@
 # Open Policy Agent WebAssembly Java SDK
 
 This is an SDK for using WebAssembly(wasm) compiled [Open Policy Agent](https://www.openpolicyagent.org/) policies
-with Java powered by [Chicory](https://github.com/dylibso/chicory), a pure Java Wasm interpreter.
+with Java powered by [Endive](https://github.com/bytecodealliance/endive), a pure Java Wasm runtime.
 
 Initial implementation was based
 on [Open Policy Agent WebAssembly NPM Module](https://github.com/open-policy-agent/npm-opa-wasm)
