@@ -52,7 +52,7 @@
     <nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.14.4</junit.version>
-    <endive.version>1.0.0</endive.version>
+    <endive.version>1.0.1</endive.version>
     <jackson.version>2.22.0</jackson.version>
     <spotless.version>3.8.0</spotless.version>
   </properties>
