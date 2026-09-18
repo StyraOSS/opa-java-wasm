@@ -9,12 +9,11 @@ import org.instancio.Instancio;
 import org.instancio.junit.Given;
 import org.instancio.junit.GivenProvider;
 import org.instancio.junit.InstancioExtension;
-import org.instancio.junit.InstancioSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 import run.endive.runtime.ByteBufferMemory;
 import run.endive.wasm.types.MemoryLimits;
 
@@ -150,8 +149,7 @@ public class OpaTest {
         }
     }
 
-    @InstancioSource(samples = 1000)
-    @ParameterizedTest
+    @RepeatedTest(1000)
     public void issue107Parametrized(@Given(InputStringProvider.class) String name) {
         var policy = issue107Policy;
 
